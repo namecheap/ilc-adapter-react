@@ -19,7 +19,7 @@
     "watch-tests": "cross-env BABEL_ENV=test jest --watch",
     "format": "prettier --write .",
     "check-format": "prettier --check .",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
