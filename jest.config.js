@@ -1,7 +1,9 @@
-export default {
-  coveragePathIgnorePatterns: ["<rootDir>/node_modules"],
-  collectCoverageFrom: ["src/**/*.js"],
+module.exports = {
   transform: {
-    ".*": "./node_modules/babel-jest",
+    [`^.+\\.(js|ts|tsx)$`]: 'ts-jest'
   },
+  moduleFileExtensions: [ 'ts', 'tsx', 'js', 'jsx', 'json'],
+  testMatch: [
+    '**/?(*.)+(spec|test).(js|ts|tsx)',
+  ],
 };

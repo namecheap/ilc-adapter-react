@@ -15,6 +15,8 @@ interface Props<ExtraProps = {}> {
 export default class AdapterErrorBoundary extends React.Component<Props, ErrorState> {
     constructor(props: Props) {
         super(props);
+
+        this.state = {};
     }
 
     // This method is called at SSR, while componentDidCatch used only at CSR
