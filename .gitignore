@@ -5,3 +5,4 @@ lib/
 yarn-error.log
 coverage
 parcel/
+/dist
