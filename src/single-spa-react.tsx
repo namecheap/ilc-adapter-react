@@ -16,7 +16,7 @@ interface ContextProps {
 export let SingleSpaContext = React.createContext<ContextProps>({});
 
 
-export class SingleSpaReact<LifecycleFnProps extends IlcLifecycleFnProps> {
+export class SingleSpaReact<LifecycleFnProps extends IlcLifecycleFnProps> implements LifeCycles<LifecycleFnProps>{
     private domElements: {[key: string]: HTMLElement} = {};
     private rootComponent?: ReactComponent<LifecycleFnProps>;
     private readonly userOpts: AdapterOpts<LifecycleFnProps>;
@@ -141,7 +141,7 @@ export class SingleSpaReact<LifecycleFnProps extends IlcLifecycleFnProps> {
     }
 }
 
-export default function ilcAdapterReact<T extends IlcLifecycleFnProps>(userOpts: AdapterOpts<T>): LifeCycles<T> {
+export default function ilcAdapterReact<T extends IlcLifecycleFnProps>(userOpts: AdapterOpts<T>) {
     return new SingleSpaReact(userOpts);
 }
 
