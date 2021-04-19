@@ -1,31 +1,70 @@
-import React from 'react';
-import ilcAdapterReact from './single-spa-react';
-import '@testing-library/jest-dom/extend-expect';
-import {AppLifecycleFnProps, MountParcel} from 'ilc-sdk/app';
+import React from "react";
+import ilcAdapterReact from "./single-spa-react";
+import "@testing-library/jest-dom/extend-expect";
+import {
+  AppLifecycleFnProps,
+  AppWrapperLifecycleFnProps,
+  MountParcel,
+  ParcelLifecycleFnProps,
+} from "ilc-sdk/app";
 
-describe('ilc-adapter-react', () => {
+function hasType<T>(a: T) {}
+
+describe("ilc-adapter-react", () => {
   let root: HTMLElement;
   const appProps: AppLifecycleFnProps = Object.freeze({
-    name: 'TEST_APP',
-    appId: 'TEST_APP',
+    name: "TEST_APP",
+    appId: "TEST_APP",
     appSdk: {
-      appId: 'TEST_APP',
+      appId: "TEST_APP",
       intl: {} as any,
     },
     domElementGetter: () => root,
-    getCurrentBasePath: () => '/',
+    getCurrentBasePath: () => "/",
     getCurrentPathProps: () => ({}),
     errorHandler: () => {},
-    mountParcel: (() => {}) as unknown as MountParcel,
+    mountParcel: ((() => {}) as unknown) as MountParcel,
   });
 
   beforeEach(() => {
-    root = document.createElement('div');
+    root = document.createElement("div");
     document.body.append(root);
   });
 
   afterEach(() => {
     document.body.removeChild(root);
+  });
+
+  it("has correct constructor typings", () => {
+    ilcAdapterReact<AppLifecycleFnProps>({
+      rootComponent: (props) => {
+        hasType<string>(props.appSdk.appId);
+        return <div />;
+      },
+    });
+
+    ilcAdapterReact<AppWrapperLifecycleFnProps>({
+      rootComponent: (props) => {
+        hasType<AppWrapperLifecycleFnProps["renderApp"]>(props.renderApp);
+        return <div />;
+      },
+    });
+
+    ilcAdapterReact<ParcelLifecycleFnProps>({
+      rootComponent: (props) => {
+        hasType<string>(props.parcelSdk.parcelId);
+        return <div />;
+      },
+    });
+
+    ilcAdapterReact({
+      rootComponent: (props) => {
+        if ("appSdk" in props) {
+          hasType<() => HTMLElement>(props.domElementGetter);
+        }
+        return <div />;
+      },
+    });
   });
 
   it(`mounts and unmounts an APP, passing through the ILC props`, () => {
@@ -37,7 +76,7 @@ describe('ilc-adapter-react', () => {
       .bootstrap(appProps)
       .then(() => lifecycles.mount(appProps))
       .then(() => {
-        expect(root.querySelector('div')?.textContent).toEqual('Hello world!');
+        expect(root.querySelector("div")?.textContent).toEqual("Hello world!");
         return lifecycles.unmount(appProps);
       })
       .then(() => {
@@ -140,19 +179,6 @@ describe('ilc-adapter-react', () => {
   //   );
   // });
   //
-  // it(`allows you to provide a domElementGetter as an opt`, () => {
-  //   const props = { why: "hello" };
-  //   const lifecycles = ilcAdapterReact({
-  //     React,
-  //     ReactDOM,
-  //     rootComponent,
-  //     domElementGetter,
-  //   });
-  //
-  //   return lifecycles.bootstrap().then(() => lifecycles.mount(props));
-  //   // Doesn't throw
-  // });
-  //
   // it(`allows you to provide a domElementGetter as a prop`, () => {
   //   const props = { why: "hello", domElementGetter };
   //   const lifecycles = ilcAdapterReact({ React, ReactDOM, rootComponent });
@@ -161,19 +187,6 @@ describe('ilc-adapter-react', () => {
   //   // Doesn't throw
   // });
   //
-  // it(`uses the dom element that was used for mount when unmounting`, () => {
-  //   const opts = { React, ReactDOM, rootComponent };
-  //   const props = { domElementGetter };
-  //
-  //   const lifecycles = ilcAdapterReact(opts);
-  //
-  //   return lifecycles
-  //     .bootstrap()
-  //     .then(() => lifecycles.mount(props))
-  //     .then(() => expect(domElementGetter).toHaveBeenCalledTimes(1))
-  //     .then(() => lifecycles.unmount(props))
-  //     .then(() => expect(domElementGetter).toHaveBeenCalledTimes(1));
-  // });
   //
   // it(`doesn't throw an error if unmount is not called with a dom element or dom element getter`, () => {
   //   const opts = { React, ReactDOM, rootComponent };
@@ -194,40 +207,6 @@ describe('ilc-adapter-react', () => {
   //     .then(() => expect(domElementGetter).toHaveBeenCalledTimes(1));
   // });
   //
-  // it(`warns if you are using react 16 but don't implement componentDidCatch`, () => {
-  //   delete componentInstance.componentDidCatch;
-  //   React.version = "16.2.0";
-  //   const props = { why: "hello" };
-  //   const lifecycles = ilcAdapterReact({
-  //     React,
-  //     ReactDOM,
-  //     rootComponent,
-  //     domElementGetter,
-  //   });
-  //
-  //   return lifecycles
-  //     .bootstrap()
-  //     .then(() => expect(console.warn).not.toHaveBeenCalled())
-  //     .then(() => lifecycles.mount(props))
-  //     .then(() => expect(console.warn).toHaveBeenCalled());
-  // });
-  //
-  // it(`does not warn if you are using react 15 but don't implement componentDidCatch`, () => {
-  //   delete componentInstance.componentDidCatch;
-  //   React.version = "15.4.1";
-  //   const props = { why: "hello" };
-  //   const lifecycles = ilcAdapterReact({
-  //     React,
-  //     ReactDOM,
-  //     rootComponent,
-  //     domElementGetter,
-  //   });
-  //
-  //   return lifecycles
-  //     .bootstrap()
-  //     .then(() => lifecycles.mount(props))
-  //     .then(() => expect(console.warn).not.toHaveBeenCalled());
-  // });
   //
   // // https://github.com/single-spa/single-spa/issues/604
   // it(`does not throw an error if a customProps prop is provided`, async () => {

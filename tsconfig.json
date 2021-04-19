@@ -17,9 +17,6 @@
     "allowSyntheticDefaultImports": true,
     "suppressImplicitAnyIndexErrors": true,
     "esModuleInterop": true,
-    "lib": [
-      "es2016",
-      "dom"
-    ]
+    "lib": ["es2016", "dom"]
   }
 }

@@ -15,6 +15,6 @@ jobs:
           node-version: "14"
       - run: npm ci
       - run: npm test
-      - run: pm run lint
-      - run: pm run check-format
+      - run: npm run lint
+      - run: npm run check-format
       - run: npm run build
