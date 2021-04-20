@@ -1,9 +1,7 @@
 .gitignore
 .prettierignore
 LICENSE
-yarn.lock
 .npmignore
-lib
-parcel/
+dist
 coverage
-pnpm-lock.yaml
+package-lock.json

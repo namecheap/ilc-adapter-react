@@ -6,8 +6,8 @@ import { ParcelError } from './errors';
 import { GlobalBrowserApi } from 'ilc-sdk/app';
 
 interface ParcelProps {
-    loadingFn: () => Promise<LifeCycles<ParcelLifecycleFnProps>>;
-    loadingConfig: {
+    loadingFn?: () => Promise<LifeCycles<ParcelLifecycleFnProps>>;
+    loadingConfig?: {
         appName: string;
         parcelName: string;
     };
@@ -77,8 +77,8 @@ export default class Parcel extends React.Component<ParcelProps, State> {
                 ? this.props.loadingFn
                 : () =>
                       GlobalBrowserApi.importParcelFromApp(
-                          this.props.loadingConfig.appName,
-                          this.props.loadingConfig.parcelName
+                          this.props.loadingConfig!.appName,
+                          this.props.loadingConfig!.parcelName
                       );
 
             this.parcel = mountParcel(loadingFn, {
