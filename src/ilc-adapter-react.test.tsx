@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ilcAdapterReact from './single-spa-react';
+import ilcAdapterReact from './ilc-adapter-react';
 import '@testing-library/jest-dom/extend-expect';
 import {
     AppLifecycleFnProps,

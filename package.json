@@ -6,6 +6,8 @@
     "types": "dist/single-spa-react.d.ts",
     "files": [
         "dist",
+        "parcel.d.ts",
+        "parcel.js",
         "LICENSE.txt",
         "NOTICE.md"
     ],

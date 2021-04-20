@@ -57,7 +57,7 @@ export default (props: ParcelLifecycleFnProps) => {
 **ILC Parcel usage:**
 
 ```tsx
-import { Parcel } from 'ilc-adapter-react';
+import Parcel from 'ilc-adapter-react/parcel';
 
 export default () => (
     <div>

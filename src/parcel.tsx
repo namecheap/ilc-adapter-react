@@ -1,5 +1,5 @@
 import React from 'react';
-import { SingleSpaContext } from './single-spa-react';
+import { SingleSpaContext } from './ilc-adapter-react';
 
 import type { LifeCycles, ParcelObject, ParcelLifecycleFnProps, MountParcel } from 'ilc-sdk/app';
 import { ParcelError } from './errors';
