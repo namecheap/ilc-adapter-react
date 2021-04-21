@@ -18,30 +18,27 @@ With the following differences:
 import ilcAdapterReact, { AppLifecycleFnProps } from 'ilc-adapter-react';
 import Root from './root.component';
 
-const reactLifecycles = ilcAdapterReact<AppLifecycleFnProps>({
+export default ilcAdapterReact<AppLifecycleFnProps>({
     rootComponent: Root,
 });
-
-export const bootstrap = reactLifecycles.bootstrap;
-export const mount = reactLifecycles.mount;
-export const unmount = reactLifecycles.unmount;
-export const unload = reactLifecycles.unload;
 ```
 
 **ILC Parcel export:**
 
 ```tsx
-import ilcAdapterReact, {ParcelLifecycleFnProps} from 'ilc-adapter-react';
+import ilcAdapterReact, { ParcelLifecycleFnProps } from 'ilc-adapter-react';
+import Root from './root.component';
 
-export const parcels = {
-    person: ilcAdapterReact<ParcelLifecycleFnProps>({
-        loadRootComponent: () => import('./person.parcel.js').then(property('default')),
-    })
+export default {
+    ...ilcAdapterReact<AppLifecycleFnProps>({
+        rootComponent: Root,
+    }),
+    parcels: {
+        person: ilcAdapterReact<ParcelLifecycleFnProps>({
+            loadRootComponent: () => import('./person.parcel.js').then(property('default')),
+        }),
+    },
 };
-
-const reactLifecycles = /* ... */
-export const bootstrap = reactLifecycles.bootstrap;
-/* ... */
 ```
 
 ```tsx
