@@ -42,7 +42,7 @@
     },
     "homepage": "https://github.com/namecheap/ilc-adapter-react#readme",
     "dependencies": {
-        "ilc-sdk": "2.5.0-alpha.2"
+        "ilc-sdk": "^2.5.0"
     },
     "devDependencies": {
         "@babel/core": "^7.12.10",
