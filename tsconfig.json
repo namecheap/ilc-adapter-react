@@ -1,0 +1,22 @@
+{
+    "include": ["./src"],
+    "exclude": ["node_modules"],
+    "compilerOptions": {
+        "outDir": "dist",
+        "strict": true,
+        "target": "es6",
+        "module": "es2020",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "declaration": true,
+        "noImplicitAny": true,
+        "sourceMap": false,
+        "jsx": "react",
+        "allowSyntheticDefaultImports": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "esModuleInterop": true,
+        "lib": ["es2016", "dom"]
+    }
+}

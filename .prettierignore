@@ -1,0 +1,7 @@
+.gitignore
+.prettierignore
+LICENSE
+.npmignore
+dist
+coverage
+package-lock.json
