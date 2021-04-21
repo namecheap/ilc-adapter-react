@@ -1,6 +1,6 @@
 {
     "name": "ilc-adapter-react",
-    "version": "1.0.0-alpha.4",
+    "version": "1.0.0",
     "description": "A single spa plugin for React apps",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
