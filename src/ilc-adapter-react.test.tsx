@@ -48,7 +48,7 @@ describe('ilc-adapter-react', () => {
         };
     };
 
-    const pause = (num = 1) => new Promise((resolve) => requestAnimationFrame(resolve));
+    const pause = () => new Promise((resolve) => requestAnimationFrame(resolve));
 
     beforeEach(() => {
         root = document.createElement('div');
