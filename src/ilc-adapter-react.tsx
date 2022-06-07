@@ -1,5 +1,5 @@
 import React, { ErrorInfo } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot, Root, hydrateRoot } from 'react-dom/client';
 import { IlcAdapterError } from './errors';
 import { AdapterOpts, IlcLifecycleFnProps, ReactComponent } from './interfaces';
 import AdapterErrorBoundary from './AdapterErrorBoundary';
@@ -13,6 +13,7 @@ export const SingleSpaContext = React.createContext<ContextProps>({});
 
 export class IlcAdapterReact<LifecycleFnProps extends IlcLifecycleFnProps> implements LifeCycles<LifecycleFnProps> {
     private domElements: { [key: string]: HTMLElement | undefined } = {};
+    private reactRoots: { [key: string]: Root | undefined } = {};
     private rootComponent?: ReactComponent<LifecycleFnProps>;
     private readonly userOpts: AdapterOpts<LifecycleFnProps>;
 
@@ -59,15 +60,18 @@ export class IlcAdapterReact<LifecycleFnProps extends IlcLifecycleFnProps> imple
 
         const elementToRender = this.getElementToRender(this.rootComponent, props);
 
-        this.reactDomRender(elementToRender, domElement);
+        const reactRoot = this.reactDomRender(elementToRender, domElement);
 
+        this.reactRoots[props.name] = reactRoot;
         this.domElements[props.name] = domElement;
     };
 
     unmount = async (props: Pick<LifecycleFnProps, 'name'>) => {
-        const domElement = this.domElements[props.name];
-        if (domElement) {
-            ReactDOM.unmountComponentAtNode(domElement);
+        const reactRoot = this.reactRoots[props.name];
+
+        if (reactRoot) {
+            reactRoot.unmount();
+            delete this.reactRoots[props.name];
             delete this.domElements[props.name];
         }
     };
@@ -136,11 +140,14 @@ export class IlcAdapterReact<LifecycleFnProps extends IlcLifecycleFnProps> imple
     private reactDomRender(elementToRender: JSX.Element, domElement: Element, forceRender = false) {
         if (!forceRender && domElement.childElementCount > 0) {
             //We're likely rendering app after SSR
-            return ReactDOM.hydrate(elementToRender, domElement);
+            return hydrateRoot(domElement, elementToRender);
         }
 
         // default to this if 'renderType' is null or doesn't match the other options
-        return ReactDOM.render(elementToRender, domElement);
+        const root = createRoot(domElement);
+        root.render(elementToRender);
+
+        return root;
     }
 }
 
