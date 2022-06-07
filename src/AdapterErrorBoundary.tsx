@@ -10,7 +10,7 @@ interface ErrorState {
 interface Props {
     onError: ErrorHandler;
     errorBoundary?: (error: Error, errorInfo?: ErrorInfo) => ReactNode;
-    children?: React.ReactNode
+    children?: React.ReactNode;
 }
 
 export default class AdapterErrorBoundary extends React.Component<Props, ErrorState> {

@@ -161,7 +161,7 @@ describe('ilc-adapter-react', () => {
             expect(rootParcel1.innerHTML).toContain('Hello from parcel: PRCL1');
             expect(rootParcel2.innerHTML).toContain('Hello from parcel: PRCL2');
 
-            await lifecycles.unmount(props1)
+            await lifecycles.unmount(props1);
             await pause();
 
             expect(rootParcel1.innerHTML).toEqual('');
@@ -239,7 +239,6 @@ describe('ilc-adapter-react', () => {
             await lifecycles.bootstrap(appProps);
             await lifecycles.mount(appProps);
             await pause();
-
 
             expect(ilcErrHandler.mock.calls.length).toBe(1);
             expect(ilcErrHandler.mock.calls[0][0]).toBe(err);
