@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ilcAdapterReact from './ilc-adapter-react';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import {
     AppLifecycleFnProps,
     AppWrapperLifecycleFnProps,
@@ -48,6 +48,8 @@ describe('ilc-adapter-react', () => {
         };
     };
 
+    const pause = (num = 1) => new Promise((resolve) => requestAnimationFrame(resolve));
+
     beforeEach(() => {
         root = document.createElement('div');
         document.body.append(root);
@@ -90,24 +92,29 @@ describe('ilc-adapter-react', () => {
         });
     });
 
-    it(`mounts and unmounts an APP, passing through the ILC props`, () => {
+    it(`mounts and unmounts an APP, passing through the ILC props`, async () => {
         const lifecycles = ilcAdapterReact<AppLifecycleFnProps>({
             rootComponent: (props: AppLifecycleFnProps) => <div>Hello world!</div>,
         });
 
-        return lifecycles
-            .bootstrap(appProps)
-            .then(() => lifecycles.mount(appProps))
-            .then(() => {
-                expect(root.querySelector('div')?.textContent).toEqual('Hello world!');
-                return lifecycles.unmount(appProps);
-            })
-            .then(() => {
-                expect(root.childElementCount).toEqual(0);
-            });
+        await lifecycles.bootstrap(appProps);
+
+        await lifecycles.mount(appProps);
+
+        await pause();
+
+        expect(root.querySelector('div')?.textContent).toEqual('Hello world!');
+
+        await lifecycles.unmount(appProps);
+
+        await pause();
+
+        console.log(root.innerHTML);
+
+        expect(root.childElementCount).toEqual(0);
     });
 
-    it(`mounts hydrates React component after SSR`, () => {
+    it(`mounts hydrates React component after SSR`, async () => {
         const lifecycles = ilcAdapterReact({
             rootComponent: () => <div>Hello world!</div>,
         });
@@ -116,20 +123,20 @@ describe('ilc-adapter-react', () => {
         ssrMarkup.innerHTML = 'Hello world!';
         root.append(ssrMarkup);
 
-        return lifecycles
-            .bootstrap(appProps)
-            .then(() => lifecycles.mount(appProps))
-            .then(() => {
-                expect(root.querySelector('div')).toBe(ssrMarkup);
-                return lifecycles.unmount(appProps);
-            })
-            .then(() => {
-                expect(root.childElementCount).toEqual(0);
-            });
+        await lifecycles.bootstrap(appProps);
+        await lifecycles.mount(appProps);
+        await pause();
+
+        expect(root.querySelector('div')).toBe(ssrMarkup);
+
+        await lifecycles.unmount(appProps);
+        await pause();
+
+        expect(root.childElementCount).toEqual(0);
     });
 
     describe('Parcels', () => {
-        it(`correctly handles two parcels using the same configuration`, () => {
+        it(`correctly handles two parcels using the same configuration`, async () => {
             root.innerHTML = '<div id="parcel1"></div><div id="parcel2"></div>';
             const rootParcel1 = root.querySelector<HTMLElement>('#parcel1')!;
             const rootParcel2 = root.querySelector<HTMLElement>('#parcel2')!;
@@ -140,29 +147,31 @@ describe('ilc-adapter-react', () => {
                 rootComponent: (props) => <div>Hello from parcel: {props.parcelSdk.parcelId}</div>,
             });
 
-            return lifecycles
-                .bootstrap(props1)
-                .then(() => lifecycles.mount(props1))
-                .then(() => {
-                    expect(rootParcel1.innerHTML).toContain('Hello from parcel: PRCL1');
-                    expect(rootParcel2.innerHTML).toEqual('');
-                })
-                .then(() => lifecycles.bootstrap(props2))
-                .then(() => lifecycles.mount(props2))
-                .then(() => {
-                    expect(rootParcel1.innerHTML).toContain('Hello from parcel: PRCL1');
-                    expect(rootParcel2.innerHTML).toContain('Hello from parcel: PRCL2');
-                })
-                .then(() => lifecycles.unmount(props1))
-                .then(() => {
-                    expect(rootParcel1.innerHTML).toEqual('');
-                    expect(rootParcel2.innerHTML).toContain('Hello from parcel: PRCL2');
-                })
-                .then(() => lifecycles.unmount(props2))
-                .then(() => {
-                    expect(rootParcel1.innerHTML).toEqual('');
-                    expect(rootParcel2.innerHTML).toEqual('');
-                });
+            await lifecycles.bootstrap(props1);
+            await lifecycles.mount(props1);
+            await pause();
+
+            expect(rootParcel1.innerHTML).toContain('Hello from parcel: PRCL1');
+            expect(rootParcel2.innerHTML).toEqual('');
+
+            await lifecycles.bootstrap(props2);
+            await lifecycles.mount(props2);
+            await pause();
+
+            expect(rootParcel1.innerHTML).toContain('Hello from parcel: PRCL1');
+            expect(rootParcel2.innerHTML).toContain('Hello from parcel: PRCL2');
+
+            await lifecycles.unmount(props1)
+            await pause();
+
+            expect(rootParcel1.innerHTML).toEqual('');
+            expect(rootParcel2.innerHTML).toContain('Hello from parcel: PRCL2');
+
+            await lifecycles.unmount(props2);
+            await pause();
+
+            expect(rootParcel1.innerHTML).toEqual('');
+            expect(rootParcel2.innerHTML).toEqual('');
         });
 
         it(`passes custom props to parcel`, async () => {
@@ -174,6 +183,8 @@ describe('ilc-adapter-react', () => {
 
             await parcelConfig.bootstrap(props);
             await parcelConfig.mount(props);
+
+            await pause();
 
             expect(root.innerHTML).toContain('Custom prop: works');
 
@@ -191,27 +202,29 @@ describe('ilc-adapter-react', () => {
             await parcelConfig.bootstrap(props);
             await parcelConfig.mount(props);
 
+            await pause();
+
             expect(root.innerHTML).toContain('Custom registry prop: works');
 
             await parcelConfig.unmount(props);
         });
     });
 
-    it(`doesn't throw an error if unmount is not called with a dom element or dom element getter`, () => {
+    it(`doesn't throw an error if unmount is not called with a dom element or dom element getter`, async () => {
         const lifecycles = ilcAdapterReact({
             rootComponent: () => <div>Hello world!</div>,
         });
 
-        return lifecycles
-            .bootstrap(appProps)
-            .then(() => lifecycles.mount(appProps))
-            .then(() => {
-                expect(root.querySelector('div')?.textContent).toEqual('Hello world!');
-                return lifecycles.unmount({ name: appProps.name });
-            })
-            .then(() => {
-                expect(root.childElementCount).toEqual(0);
-            });
+        await lifecycles.bootstrap(appProps);
+        await lifecycles.mount(appProps);
+        await pause();
+
+        expect(root.querySelector('div')?.textContent).toEqual('Hello world!');
+
+        await lifecycles.unmount({ name: appProps.name });
+        await pause();
+
+        expect(root.childElementCount).toEqual(0);
     });
 
     describe('error boundaries', () => {
@@ -225,6 +238,8 @@ describe('ilc-adapter-react', () => {
 
             await lifecycles.bootstrap(appProps);
             await lifecycles.mount(appProps);
+            await pause();
+
 
             expect(ilcErrHandler.mock.calls.length).toBe(1);
             expect(ilcErrHandler.mock.calls[0][0]).toBe(err);
@@ -246,6 +261,7 @@ describe('ilc-adapter-react', () => {
 
             await lifecycles.bootstrap(appProps);
             await lifecycles.mount(appProps);
+            await pause();
 
             expect(root.innerHTML).toContain('Caught error: test err');
 
