@@ -58,6 +58,8 @@
         "jest-cli": "^28.1.1",
         "jest-environment-jsdom": "^28.1.1",
         "prettier": "^2.2.1",
+        "react": "~18.1.0",
+        "react-dom": "~18.1.0",
         "rimraf": "^3.0.2",
         "ts-jest": "^28.0.4",
         "tsd": "^0.14.0",
