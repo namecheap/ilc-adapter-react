@@ -64,6 +64,8 @@ export class IlcAdapterReact<LifecycleFnProps extends IlcLifecycleFnProps> imple
 
         this.reactRoots[props.name] = reactRoot;
         this.domElements[props.name] = domElement;
+
+        return reactRoot;
     };
 
     unmount = async (props: Pick<LifecycleFnProps, 'name'>) => {
@@ -92,7 +94,9 @@ export class IlcAdapterReact<LifecycleFnProps extends IlcLifecycleFnProps> imple
 
         const elementToRender = this.getElementToRender(this.rootComponent, props);
 
-        this.reactDomRender(elementToRender, domElement, true);
+        const reactRoot = this.reactDomRender(elementToRender, domElement, true);
+
+        return reactRoot;
     };
 
     private chooseDomElementGetter(props: IlcLifecycleFnProps) {
