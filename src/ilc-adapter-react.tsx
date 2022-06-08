@@ -98,7 +98,7 @@ export class IlcAdapterReact<LifecycleFnProps extends IlcLifecycleFnProps> imple
 
         const reactRoot = this.reactRoots[props.name];
 
-        if(reactRoot === undefined) {
+        if (reactRoot === undefined) {
             throw new IlcAdapterError(
                 `ilc-adapter-react: Looks like "update" was called before "mount" or after "unmount". Root node is not defined`
             );
@@ -149,14 +149,19 @@ export class IlcAdapterReact<LifecycleFnProps extends IlcLifecycleFnProps> imple
         );
     }
 
-    private reactDomRender(elementToRender: JSX.Element, domElement: Element, forceRender = false, reactRoot?: Root): Root {
+    private reactDomRender(
+        elementToRender: JSX.Element,
+        domElement: Element,
+        forceRender = false,
+        reactRoot?: Root
+    ): Root {
         if (!forceRender && domElement.childElementCount > 0) {
             //We're likely rendering app after SSR
             return hydrateRoot(domElement, elementToRender);
         }
 
         // default to this if 'renderType' is null or doesn't match the other options
-        if(!reactRoot) {
+        if (!reactRoot) {
             const root = createRoot(domElement);
             root.render(elementToRender);
             return root;
