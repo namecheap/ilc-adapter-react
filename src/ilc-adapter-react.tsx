@@ -104,7 +104,6 @@ export class IlcAdapterReact<LifecycleFnProps extends IlcLifecycleFnProps> imple
             );
         }
 
-        // Should be separated with updated ????
         return this.reactDomRender(elementToRender, domElement, true, reactRoot);
     };
 
