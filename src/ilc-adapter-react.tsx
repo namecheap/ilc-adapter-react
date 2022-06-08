@@ -44,7 +44,7 @@ export class IlcAdapterReact<LifecycleFnProps extends IlcLifecycleFnProps> imple
         }
     };
 
-    mount = async (props: LifecycleFnProps) => {
+    mount = async (props: LifecycleFnProps): Promise<Root> => {
         if (!this.rootComponent) {
             throw new IlcAdapterError(
                 `ilc-adapter-react: Looks like "mount" was called before completion of the "bootstrap"`
@@ -60,7 +60,9 @@ export class IlcAdapterReact<LifecycleFnProps extends IlcLifecycleFnProps> imple
 
         const elementToRender = this.getElementToRender(this.rootComponent, props);
 
-        const reactRoot = this.reactDomRender(elementToRender, domElement);
+        let reactRoot = this.reactRoots[props.name];
+
+        reactRoot = this.reactDomRender(elementToRender, domElement, !!reactRoot, reactRoot);
 
         this.reactRoots[props.name] = reactRoot;
         this.domElements[props.name] = domElement;
@@ -78,7 +80,7 @@ export class IlcAdapterReact<LifecycleFnProps extends IlcLifecycleFnProps> imple
         }
     };
 
-    update? = async (props: LifecycleFnProps) => {
+    update? = async (props: LifecycleFnProps): Promise<Root> => {
         if (!this.rootComponent) {
             throw new IlcAdapterError(
                 `ilc-adapter-react: Looks like "update" was called before completion of the "bootstrap"`
@@ -94,9 +96,15 @@ export class IlcAdapterReact<LifecycleFnProps extends IlcLifecycleFnProps> imple
 
         const elementToRender = this.getElementToRender(this.rootComponent, props);
 
-        const reactRoot = this.reactDomRender(elementToRender, domElement, true);
+        const reactRoot = this.reactRoots[props.name];
 
-        return reactRoot;
+        if (reactRoot === undefined) {
+            throw new IlcAdapterError(
+                `ilc-adapter-react: Looks like "update" was called before "mount" or after "unmount". Root node is not defined`
+            );
+        }
+
+        return this.reactDomRender(elementToRender, domElement, true, reactRoot);
     };
 
     private chooseDomElementGetter(props: IlcLifecycleFnProps) {
@@ -141,17 +149,26 @@ export class IlcAdapterReact<LifecycleFnProps extends IlcLifecycleFnProps> imple
         );
     }
 
-    private reactDomRender(elementToRender: JSX.Element, domElement: Element, forceRender = false) {
+    private reactDomRender(
+        elementToRender: JSX.Element,
+        domElement: Element,
+        forceRender = false,
+        reactRoot?: Root
+    ): Root {
         if (!forceRender && domElement.childElementCount > 0) {
             //We're likely rendering app after SSR
             return hydrateRoot(domElement, elementToRender);
         }
 
         // default to this if 'renderType' is null or doesn't match the other options
-        const root = createRoot(domElement);
-        root.render(elementToRender);
-
-        return root;
+        if (!reactRoot) {
+            const root = createRoot(domElement);
+            root.render(elementToRender);
+            return root;
+        } else {
+            reactRoot.render(elementToRender);
+            return reactRoot;
+        }
     }
 }
 
