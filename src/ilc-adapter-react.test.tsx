@@ -21,6 +21,9 @@ describe('ilc-adapter-react', () => {
         appSdk: {
             appId: 'TEST_APP',
             intl: {} as any,
+            render404: () => {
+                return;
+            },
         },
         domElementGetter: () => root,
         getCurrentBasePath: () => '/',
