@@ -21,13 +21,16 @@ describe('ilc-adapter-react', () => {
         appSdk: {
             appId: 'TEST_APP',
             intl: {} as any,
+            render404: () => {
+                return;
+            },
         },
         domElementGetter: () => root,
         getCurrentBasePath: () => '/',
         getCurrentPathProps: () => ({}),
         errorHandler: ilcErrHandler,
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        mountParcel: ((() => {}) as unknown) as MountParcel,
+        mountParcel: (() => {}) as unknown as MountParcel,
     });
     const getParcelProps = function <T = unknown>(
         parcelId = 'TEST_PARCEL',
@@ -44,7 +47,7 @@ describe('ilc-adapter-react', () => {
             name: parcelId,
             unmountSelf: () => Promise.resolve(null),
             // eslint-disable-next-line @typescript-eslint/no-empty-function
-            mountParcel: ((() => {}) as unknown) as MountParcel,
+            mountParcel: (() => {}) as unknown as MountParcel,
         };
     };
 
