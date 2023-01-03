@@ -11,8 +11,6 @@ export type {
     IIlcAppSdk,
 } from 'ilc-sdk/app';
 
-
 export { IlcSdk, AppAssets };
-
 
 export default ilcAdapterReact;
