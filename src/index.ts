@@ -1,4 +1,3 @@
-import IlcSdk, { AppAssets } from 'ilc-sdk';
 import ilcAdapterReact from './ilc-adapter-react';
 
 export type {
@@ -11,7 +10,5 @@ export type {
     IIlcAppSdk,
     AppSdkAdapter,
 } from 'ilc-sdk/app';
-
-export { IlcSdk, AppAssets };
 
 export default ilcAdapterReact;
