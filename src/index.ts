@@ -9,7 +9,7 @@ export type {
     Render404,
     ErrorHandler,
     IIlcAppSdk,
-    AppSdkAdapter
+    AppSdkAdapter,
 } from 'ilc-sdk/app';
 
 export { IlcSdk, AppAssets };
