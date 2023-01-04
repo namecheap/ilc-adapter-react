@@ -1,6 +1,6 @@
 {
     "name": "ilc-adapter-react",
-    "version": "2.1.4",
+    "version": "2.1.5",
     "description": "A single spa plugin for React apps",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -10,8 +10,8 @@
         "parcel.js",
         "LICENSE.txt",
         "NOTICE.md",
-        "dist/server.js",
-        "dist/server.d.ts"
+        "server.js",
+        "server.d.ts"
     ],
     "scripts": {
         "build": "tsc",
