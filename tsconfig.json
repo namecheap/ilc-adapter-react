@@ -1,6 +1,15 @@
 {
-    "include": ["./src"],
-    "exclude": ["node_modules"],
+    "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
+    "exclude": [
+        "src/**/*.spec.ts",
+        "src/**/*.test.ts",
+        "src/**/*.spec.tsx",
+        "src/**/*.test.tsx",
+        "src/**/*.spec.js",
+        "src/**/*.test.js",
+        "src/**/*.spec.jsx",
+        "src/**/*.test.jsx"
+    ],
     "compilerOptions": {
         "outDir": "dist",
         "strict": true,
@@ -15,7 +24,6 @@
         "sourceMap": false,
         "jsx": "react",
         "allowSyntheticDefaultImports": true,
-        "suppressImplicitAnyIndexErrors": true,
         "esModuleInterop": true,
         "lib": ["es2016", "dom"]
     }

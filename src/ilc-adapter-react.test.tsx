@@ -4,12 +4,13 @@ import '@testing-library/jest-dom';
 import {
     AppLifecycleFnProps,
     AppWrapperLifecycleFnProps,
+    IlcIntl,
     MountParcel,
     ParcelLifecycleFnProps,
     ParcelSdk,
 } from 'ilc-sdk/app';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
+// eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
 function hasType<T>(v: T) {}
 
 describe('ilc-adapter-react', () => {
@@ -20,7 +21,7 @@ describe('ilc-adapter-react', () => {
         appId: 'TEST_APP',
         appSdk: {
             appId: 'TEST_APP',
-            intl: {} as any,
+            intl: {} as IlcIntl,
             render404: () => {
                 return;
             },
@@ -41,7 +42,7 @@ describe('ilc-adapter-react', () => {
             parcelSdk: {
                 parcelId,
                 registryProps: registryProps || {},
-                intl: {} as any,
+                intl: {} as IlcIntl,
             } as ParcelSdk<T>,
             domElement,
             name: parcelId,
@@ -63,6 +64,7 @@ describe('ilc-adapter-react', () => {
         document.body.removeChild(root);
     });
 
+    // eslint-disable-next-line jest/expect-expect
     it('has correct constructor typings', () => {
         ilcAdapterReact<AppLifecycleFnProps>({
             rootComponent: (props) => {
@@ -97,7 +99,7 @@ describe('ilc-adapter-react', () => {
 
     it(`mounts and unmounts an APP, passing through the ILC props`, async () => {
         const lifecycles = ilcAdapterReact<AppLifecycleFnProps>({
-            rootComponent: (props: AppLifecycleFnProps) => <div>Hello world!</div>,
+            rootComponent: () => <div>Hello world!</div>,
         });
 
         await lifecycles.bootstrap(appProps);
@@ -256,7 +258,7 @@ describe('ilc-adapter-react', () => {
                 rootComponent: () => {
                     throw err;
                 },
-                errorBoundary(err, errInfo, props) {
+                errorBoundary(err) {
                     return <div>Caught error: {err.message}</div>;
                 },
             });

@@ -123,8 +123,8 @@ export class IlcAdapterReact<LifecycleFnProps extends IlcLifecycleFnProps> imple
         throw new IlcAdapterError(`ilc-adapter-react: Unable to identify DOM node to app/parcel mount`);
     }
 
-    private getElementToRender(component: ReactComponent<LifecycleFnProps>, props: IlcLifecycleFnProps) {
-        const rootComponentElement = React.createElement<any>(component, props); //TODO: remove "any"
+    private getElementToRender(component: ReactComponent<LifecycleFnProps>, props: LifecycleFnProps) {
+        const rootComponentElement = React.createElement(component, props);
 
         const errorBoundary = this.userOpts.errorBoundary
             ? (caughtError: Error, caughtErrorInfo?: ErrorInfo) =>

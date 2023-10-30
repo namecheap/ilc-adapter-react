@@ -5,7 +5,7 @@ import type { LifeCycles, ParcelObject, ParcelLifecycleFnProps, MountParcel } fr
 import { ParcelError } from './errors';
 import { GlobalBrowserApi } from 'ilc-sdk/app';
 
-interface ParcelProps {
+export interface ParcelProps {
     loadingFn?: () => Promise<LifeCycles<ParcelLifecycleFnProps>>;
     loadingConfig?: {
         appName: string;
@@ -17,10 +17,10 @@ interface ParcelProps {
     wrapStyle?: React.CSSProperties;
     wrapClassName?: string;
     appendTo?: HTMLElement;
-    parcelDidMount?: () => any;
-    handleError?: (err: Error, errorInfo?: Record<string, unknown>) => any;
+    parcelDidMount?: () => unknown;
+    handleError?: (err: Error, errorInfo?: Record<string, unknown>) => unknown;
 
-    [extraProp: string]: any;
+    [extraProp: string]: unknown;
 }
 
 interface State {
@@ -33,7 +33,7 @@ export default class Parcel extends React.Component<ParcelProps, State> {
     private mountParcel?: MountParcel;
     private parcel?: ParcelObject;
     private unmounted = false;
-    private activePromiseChain?: Promise<any>;
+    private activePromiseChain?: Promise<unknown>;
 
     constructor(props: ParcelProps) {
         super(props);
@@ -65,8 +65,11 @@ export default class Parcel extends React.Component<ParcelProps, State> {
             } else if (this.props.appendTo) {
                 this.createdDomElement = domElement = document.createElement(this.getWrapWith());
                 const wrapStyle = this.getWrapStyle();
-                Object.keys(wrapStyle).forEach((key) => {
-                    domElement.style[key] = wrapStyle[key];
+                (Object.keys(wrapStyle) as (keyof React.CSSProperties)[]).forEach((key) => {
+                    const value = wrapStyle[key];
+                    if (typeof value === 'string') {
+                        domElement.style.setProperty(key, value);
+                    }
                 });
                 this.props.appendTo.appendChild(domElement);
             } else {
@@ -170,7 +173,7 @@ export default class Parcel extends React.Component<ParcelProps, State> {
         this.el = el;
     };
 
-    private schedulePromise(action: 'unmount' | 'mount' | 'update', promise: () => Promise<any> | void) {
+    private schedulePromise(action: 'unmount' | 'mount' | 'update', promise: () => Promise<unknown> | void) {
         if (this.state.hasError && action !== 'unmount') {
             // In an error state, we don't do anything anymore except for unmounting
             return;
@@ -223,7 +226,7 @@ export default class Parcel extends React.Component<ParcelProps, State> {
     }
 
     private getParcelProps() {
-        const parcelProps: any = { ...this.props };
+        const parcelProps = { ...this.props };
 
         delete parcelProps.mountParcel;
         delete parcelProps.config;

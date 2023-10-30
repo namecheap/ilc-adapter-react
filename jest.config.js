@@ -1,8 +1,8 @@
 module.exports = {
     transform: {
-        [`^.+\\.(js|ts|tsx)$`]: 'ts-jest',
+        '^.+\\.[tj]sx?$': 'ts-jest',
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
-    testMatch: ['**/?(*.)+(spec|test).(js|ts|tsx)'],
+    testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
     testEnvironment: 'jsdom',
 };
