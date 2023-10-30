@@ -1,6 +1,6 @@
 {
     "name": "ilc-adapter-react",
-    "version": "2.1.5",
+    "version": "3.0.0",
     "description": "A single spa plugin for React apps",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -60,7 +60,7 @@
         "typescript": "^5.2.2"
     },
     "peerDependencies": {
-        "ilc-sdk": "file:../ilc-sdk/ilc-sdk-5.0.0.tgz",
+        "ilc-sdk": "^5.0.0",
         "react": "~18.2.0",
         "react-dom": "~18.2.0"
     }
