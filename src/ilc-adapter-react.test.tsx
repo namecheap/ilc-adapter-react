@@ -10,7 +10,7 @@ import {
     ParcelSdk,
 } from 'ilc-sdk/app';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function hasType<T>(v: T) {}
 
 describe('ilc-adapter-react', () => {
@@ -30,7 +30,6 @@ describe('ilc-adapter-react', () => {
         getCurrentBasePath: () => '/',
         getCurrentPathProps: () => ({}),
         errorHandler: ilcErrHandler,
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
         mountParcel: (() => {}) as unknown as MountParcel,
     });
     const getParcelProps = function <T = unknown>(
@@ -47,7 +46,6 @@ describe('ilc-adapter-react', () => {
             domElement,
             name: parcelId,
             unmountSelf: () => Promise.resolve(null),
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
             mountParcel: (() => {}) as unknown as MountParcel,
         };
     };
