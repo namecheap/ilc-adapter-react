@@ -5,10 +5,10 @@ Adapter for React applications that are registered as either ILC applications or
 Implements pretty much the same functionality as [single-spa-react](https://github.com/single-spa/single-spa-react).
 With the following differences:
 
--   SSR optimized. Automatically decides whenever we need to use `ReactDOM.hydrate` or `ReactDOM.render`
--   100% typed, provides advanced Typescript types
--   Provides complete [ILC](https://github.com/namecheap/ilc) integration out of the box. This includes: better error handling.
--   Still, single-spa compatible.
+- SSR optimized. Automatically decides whenever we need to use `ReactDOM.hydrate` or `ReactDOM.render`
+- 100% typed, provides advanced Typescript types
+- Provides complete [ILC](https://github.com/namecheap/ilc) integration out of the box. This includes: better error handling.
+- Still, single-spa compatible.
 
 ## Examples of usage
 
