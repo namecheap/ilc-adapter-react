@@ -17,14 +17,14 @@ jobs:
 
         strategy:
             matrix:
-                node-version: [16.x, 18.x, 20.x]
+                node-version: [18.x, 20.x, 22.x]
 
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
               with:
                   fetch-depth: 0
             - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v5
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: 'npm'
@@ -33,12 +33,11 @@ jobs:
               name: Lint commit messages
               run: npx commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
             - run: npm run check-format
-            - if: matrix.node-version != '16.x' # eslint v9 requires node >= 18
-              run: npm run lint
+            - run: npm run lint
             - run: npm run build
             - run: npm test
-            - if: matrix.node-version == '20.x'
-              uses: actions/upload-artifact@v3
+            - if: matrix.node-version == '22.x'
+              uses: actions/upload-artifact@v4
               with:
                   name: Code coverage
                   path: coverage/
@@ -50,10 +49,10 @@ jobs:
         environment: npm_publish
         if: github.ref == 'refs/heads/master'
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
+            - uses: actions/checkout@v5
+            - uses: actions/setup-node@v5
               with:
-                  node-version: 20.x
+                  node-version: 22.x
                   cache: 'npm'
             - run: npm ci
             - name: Publish new version
