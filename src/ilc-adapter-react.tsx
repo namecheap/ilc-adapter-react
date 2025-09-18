@@ -62,7 +62,7 @@ export class IlcAdapterReact<LifecycleFnProps extends IlcLifecycleFnProps> imple
 
         let reactRoot = this.reactRoots[props.name];
 
-        reactRoot = this.reactDomRender(elementToRender, domElement, !!reactRoot, reactRoot);
+        reactRoot = this.reactDomRender(elementToRender, domElement, !!reactRoot, reactRoot, props);
 
         this.reactRoots[props.name] = reactRoot;
         this.domElements[props.name] = domElement;
@@ -104,7 +104,7 @@ export class IlcAdapterReact<LifecycleFnProps extends IlcLifecycleFnProps> imple
             );
         }
 
-        return this.reactDomRender(elementToRender, domElement, true, reactRoot);
+        return this.reactDomRender(elementToRender, domElement, true, reactRoot, props);
     };
 
     private chooseDomElementGetter(props: IlcLifecycleFnProps) {
@@ -153,11 +153,16 @@ export class IlcAdapterReact<LifecycleFnProps extends IlcLifecycleFnProps> imple
         elementToRender: JSX.Element,
         domElement: Element,
         forceRender = false,
-        reactRoot?: Root
+        reactRoot: Root | undefined,
+        props: IlcLifecycleFnProps
     ): Root {
         if (!forceRender && domElement.childElementCount > 0) {
             //We're likely rendering app after SSR
-            return hydrateRoot(domElement, elementToRender);
+            const { onRecoverableError } = this.userOpts;
+            const onRecoverableErrorWrapped = onRecoverableError
+                ? (error: unknown, errorInfo: ErrorInfo) => onRecoverableError(error, errorInfo, props)
+                : undefined;
+            return hydrateRoot(domElement, elementToRender, { onRecoverableError: onRecoverableErrorWrapped });
         }
 
         // default to this if 'renderType' is null or doesn't match the other options

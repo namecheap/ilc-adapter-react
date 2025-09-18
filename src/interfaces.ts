@@ -9,6 +9,7 @@ interface AdapterOptsAux {
     parcelCanUpdate?: boolean;
     suppressComponentDidCatchWarning?: boolean;
     errorBoundary?: (err: Error, info: ErrorInfo | undefined, props: IlcLifecycleFnProps) => ReactNode;
+    onRecoverableError?: (error: unknown, errorInfo: ErrorInfo, props: IlcLifecycleFnProps) => void;
 }
 
 interface AdapterOptsSync<T> extends AdapterOptsAux {
