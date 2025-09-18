@@ -138,6 +138,34 @@ describe('ilc-adapter-react', () => {
         expect(root.childElementCount).toEqual(0);
     });
 
+    it('onRecoverableError hander works', async () => {
+        const onRecoverableError = jest.fn();
+        const lifecycles = ilcAdapterReact({
+            rootComponent: () => <h3>Hello world!</h3>,
+            onRecoverableError,
+        });
+
+        const ssrMarkup = document.createElement('h3');
+        ssrMarkup.innerHTML = 'Hello world!CORRUPTED';
+        root.append(ssrMarkup);
+
+        await lifecycles.bootstrap(appProps);
+        await lifecycles.mount(appProps);
+        await pause();
+
+        expect(root.innerHTML).toBe('<h3>Hello world!</h3>');
+        expect(onRecoverableError).toHaveBeenCalledWith(
+            new Error('Text content does not match server-rendered HTML.'),
+            { componentStack: expect.stringMatching(/h3/m), digest: null },
+            appProps
+        );
+
+        await lifecycles.unmount(appProps);
+        await pause();
+
+        expect(root.childElementCount).toEqual(0);
+    });
+
     describe('Parcels', () => {
         it(`correctly handles two parcels using the same configuration`, async () => {
             root.innerHTML = '<div id="parcel1"></div><div id="parcel2"></div>';
