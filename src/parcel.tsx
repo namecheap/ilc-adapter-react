@@ -194,7 +194,7 @@ export default class Parcel extends React.Component<ParcelProps, State> {
                 const err = new ParcelError(`While executing "${action}": ${error.message}`, error);
                 this.handleError(err);
 
-                // No more things to do should be done -- the EmbeddedApplication is in an error state
+                // No more things should be done -- the EmbeddedApplication is in an error state
             });
     }
 

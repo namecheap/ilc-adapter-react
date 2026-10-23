@@ -120,7 +120,7 @@ export class IlcAdapterReact<LifecycleFnProps extends IlcLifecycleFnProps> imple
             return props.domElementGetter;
         }
 
-        throw new IlcAdapterError(`ilc-adapter-react: Unable to identify DOM node to app/parcel mount`);
+        throw new IlcAdapterError(`ilc-adapter-react: Unable to identify DOM node for app/parcel mount`);
     }
 
     private getElementToRender(component: ReactComponent<LifecycleFnProps>, props: LifecycleFnProps) {
@@ -135,7 +135,7 @@ export class IlcAdapterReact<LifecycleFnProps extends IlcLifecycleFnProps> imple
             ? props.errorHandler
             : (error) => {
                   console.error(
-                      `ilc-adapter-react: app or parcel "${props.name}" have thrown an uncaught error:`,
+                      `ilc-adapter-react: app or parcel "${props.name}" has thrown an uncaught error:`,
                       error
                   );
               };
