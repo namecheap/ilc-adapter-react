@@ -1,5 +1,10 @@
 # ilc-adapter-react
 
+> [!IMPORTANT]
+> This package has moved to the [ilc-monorepo](https://github.com/namecheap/ilc-monorepo/tree/master/packages/ilc-adapter-react) repository.
+> Development continues there, so please open new issues and pull requests in that repository.
+> The npm package name `ilc-adapter-react` stays the same. This repository is no longer updated.
+
 Adapter for React applications that are registered as either ILC applications or ILC/single-spa parcels.
 
 Implements pretty much the same functionality as [single-spa-react](https://github.com/single-spa/single-spa-react).
